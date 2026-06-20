@@ -196,7 +196,7 @@
         }
       }
 
-      /* ─── Hati Besar di Tengah (muncul setelah 30 klik) ─── */
+      /* ─── Hati Besar di Tengah (muncul setelah 5 klik) ─── */
       #big-heart {
         position: fixed;
         top: 50%;
@@ -337,7 +337,7 @@
       <!-- Wadah gelembung -->
       <div id="bubble-container"></div>
 
-      <!-- HATI BESAR (muncul setelah 30 klik) -->
+      <!-- HATI BESAR (muncul setelah 5 klik) -->
       <div id="big-heart">❤️</div>
 
       <!-- Teks utama dengan efek typing -->
@@ -372,8 +372,8 @@
           maxDuration: 22,
           heartCount: 10,
           heartEmojis: ["❤️", "💕", "💗", "💖", "♥️"],
-          // Target klik untuk "kejutan"
-          targetClicks: 30,
+          // Target klik untuk "kejutan" – SEKARANG 5
+          targetClicks: 5,
         };
 
         // ─── State ───
@@ -485,7 +485,7 @@
           }
         }
 
-        // ─── Fungsi untuk "kejutan" setelah 30 klik ───
+        // ─── Fungsi untuk "kejutan" setelah 5 klik ───
         function celebrate() {
           if (hasCelebrated) return;
           hasCelebrated = true;
