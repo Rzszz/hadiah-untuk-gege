@@ -5,19 +5,26 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>❤ Surat untuk Nisa</title>
+    <title>Untuk Teman Cantik</title>
+
+    <!-- Typed.js dari CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.9"></script>
+
     <style>
-      * {
+      /* ─── Reset & Dasar ─── */
+      *,
+      *::before,
+      *::after {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
 
+      html,
       body {
+        width: 100%;
         min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        overflow: hidden;
         font-family: "Segoe UI", "Poppins", system-ui, -apple-system, sans-serif;
         background: linear-gradient(
           145deg,
@@ -26,144 +33,158 @@
           #e8eaf6 70%,
           #e0f7fa 100%
         );
-        padding: 20px;
-        cursor: pointer;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
         touch-action: manipulation;
-        overflow: hidden;
-        position: relative;
       }
 
-      /* ─── Container untuk hati jatuh ─── */
-      #hearts-container {
+      /* ─── Container ─── */
+      #app {
         position: fixed;
         inset: 0;
-        z-index: 0;
-        pointer-events: none;
-        overflow: hidden;
-      }
-
-      /* ─── Hati jatuh ─── */
-      .falling-heart {
-        position: absolute;
-        top: -10%;
-        font-size: 1.4rem;
-        opacity: 0.5;
-        animation: fall linear infinite;
-        pointer-events: none;
-        will-change: transform;
-        text-shadow: 0 0 20px rgba(233, 30, 99, 0.15);
-      }
-
-      @keyframes fall {
-        0% {
-          transform: translateY(0) translateX(0) rotate(0deg) scale(0.6);
-          opacity: 0.2;
-        }
-        10% {
-          opacity: 0.7;
-        }
-        90% {
-          opacity: 0.7;
-        }
-        100% {
-          transform: translateY(110vh) translateX(var(--drift, 40px))
-            rotate(720deg) scale(0.4);
-          opacity: 0.1;
-        }
-      }
-
-      /* ─── Amplop / Surat ─── */
-      .envelope {
-        position: relative;
-        z-index: 1;
-        max-width: 520px;
         width: 100%;
-        background: rgba(255, 255, 255, 0.6);
-        backdrop-filter: blur(12px);
-        border-radius: 40px;
-        padding: 40px 30px 50px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
-          0 8px 24px rgba(233, 30, 99, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.7);
-        text-align: center;
-        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-          box-shadow 0.3s ease;
+        height: 100%;
         overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      .envelope::before {
-        content: "";
+      /* ─── Latar Belakang ─── */
+      #bg-layer {
         position: absolute;
         inset: 0;
         background: radial-gradient(
-          circle at 30% 20%,
-          rgba(255, 182, 193, 0.2) 0%,
-          transparent 60%
-        );
+            circle at 20% 30%,
+            rgba(255, 182, 193, 0.25) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(206, 147, 216, 0.2) 0%,
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 40% 80%,
+            rgba(179, 229, 252, 0.18) 0%,
+            transparent 50%
+          );
         pointer-events: none;
-        border-radius: 40px;
+        z-index: 0;
       }
 
-      .envelope:hover {
-        transform: scale(1.02) translateY(-6px);
-        box-shadow: 0 30px 80px rgba(233, 30, 99, 0.15);
+      /* ─── Tempat Gelembung ─── */
+      #bubble-container {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
       }
 
-      .envelope:active {
-        transform: scale(0.96);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      /* ─── Gelembung ─── */
+      .bubble {
+        position: absolute;
+        border-radius: 50%;
+        cursor: pointer;
+        pointer-events: auto;
+        will-change: transform, opacity;
+        transition: transform 0.15s ease-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 -8px 20px rgba(255, 255, 255, 0.5),
+          0 4px 20px rgba(0, 0, 0, 0.06),
+          inset 0 4px 12px rgba(255, 255, 255, 0.8);
+        background: radial-gradient(
+          circle at 30% 25%,
+          rgba(255, 255, 255, 0.85) 0%,
+          rgba(255, 255, 255, 0.15) 70%,
+          rgba(255, 255, 255, 0.3) 100%
+        );
+        backdrop-filter: blur(1px);
+        border: 1px solid rgba(255, 255, 255, 0.35);
       }
 
-      /* ─── Dekorasi ─── */
-      .stamp {
-        font-size: 2.4rem;
-        margin-bottom: 8px;
-        display: inline-block;
-        animation: floatStamp 3s ease-in-out infinite;
+      .bubble::after {
+        content: "";
+        position: absolute;
+        top: 12%;
+        left: 22%;
+        width: 28%;
+        height: 20%;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.75) 0%,
+          transparent 80%
+        );
+        opacity: 0.7;
+        pointer-events: none;
       }
 
-      @keyframes floatStamp {
-        0%,
+      .bubble:active {
+        transform: scale(0.92);
+      }
+
+      /* ─── Animasi gelembung naik ─── */
+      @keyframes float-up {
+        0% {
+          transform: translateY(0) scale(0.6);
+          opacity: 0;
+        }
+        8% {
+          opacity: 0.9;
+          transform: translateY(0) scale(1);
+        }
+        92% {
+          opacity: 0.8;
+        }
         100% {
-          transform: rotate(-4deg) translateY(0);
-        }
-        50% {
-          transform: rotate(4deg) translateY(-6px);
+          transform: translateY(calc(-110vh - 100px)) scale(0.9);
+          opacity: 0;
         }
       }
 
-      .letter-icon {
-        font-size: 4.5rem;
-        line-height: 1;
-        margin: 4px 0 12px;
-        display: block;
-        animation: letterPulse 2.5s ease-in-out infinite;
+      .bubble.animating {
+        animation: float-up var(--duration, 12s) cubic-bezier(0.2, 0.8, 0.3, 1)
+          forwards;
       }
 
-      @keyframes letterPulse {
-        0%,
-        100% {
-          transform: scale(1) rotate(0deg);
-        }
-        50% {
-          transform: scale(1.08) rotate(-2deg);
-        }
+      /* ─── Teks Utama dengan efek typing ─── */
+      #text-container {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        padding: 20px;
+        pointer-events: none;
+        transition: transform 0.5s ease;
       }
 
-      .main-title {
-        font-size: clamp(2.2rem, 8vw, 3.8rem);
+      #main-text {
+        /* UKURAN FONT DIKECILKAN: 20px ~ 30px (desktop 25-30, HP 20-25) */
+        font-size: clamp(1.25rem, 2.5vw, 1.9rem);
         font-weight: 700;
+        line-height: 1.3;
         letter-spacing: -0.02em;
-        background: linear-gradient(135deg, #e91e63, #9c27b0, #3f51b5);
-        background-size: 200% 200%;
+        background: linear-gradient(135deg, #e91e63, #9c27b0, #3f51b5, #00bcd4);
+        background-size: 300% 300%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        animation: gradShift 6s ease-in-out infinite alternate;
-        margin: 8px 0 4px;
-        line-height: 1.2;
+        animation: gradShift 8s ease-in-out infinite alternate;
+        text-shadow: 0 0 80px rgba(233, 30, 99, 0.15),
+          0 0 120px rgba(156, 39, 176, 0.1);
+        filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.06));
+        pointer-events: none;
+        display: inline-block;
+        transition: font-size 0.6s ease, background 0.6s ease;
+      }
+
+      /* Span yang diketik oleh Typed.js – warnanya ikut gradien */
+      #main-text .typing {
+        -webkit-text-fill-color: initial;
+        background: none;
+        display: inline-block;
       }
 
       @keyframes gradShift {
@@ -175,237 +196,516 @@
         }
       }
 
-      .sub-text {
-        font-size: clamp(1rem, 2.5vw, 1.3rem);
-        color: rgba(233, 30, 99, 0.65);
+      /* ─── Hati Besar di Tengah (muncul setelah 30 klik) ─── */
+      #big-heart {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        z-index: 5;
+        pointer-events: none;
+        font-size: clamp(20rem, 60vw, 50rem);
+        opacity: 0;
+        transition: opacity 1s ease,
+          transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        color: rgba(233, 30, 99, 0.25);
+        text-shadow: 0 0 80px rgba(233, 30, 99, 0.3),
+          0 0 160px rgba(156, 39, 176, 0.2);
+        line-height: 1;
+      }
+
+      #big-heart.show {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      /* ─── Efek Hati (love burst) ─── */
+      .heart-particle {
+        position: fixed;
+        pointer-events: none;
+        z-index: 999;
+        font-size: clamp(1.2rem, 3vw, 2.4rem);
+        will-change: transform, opacity;
+        animation: heartFly var(--fly-duration, 1.2s)
+          cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+      }
+
+      @keyframes heartFly {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0) scale(1) rotate(0deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--tx, 80px), var(--ty, -120px)) scale(0.2)
+            rotate(var(--rot, 360deg));
+        }
+      }
+
+      /* ─── Efek pecah gelembung ─── */
+      .bubble.burst {
+        animation: burstPop 0.3s ease-out forwards !important;
+      }
+
+      @keyframes burstPop {
+        0% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.25);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(0);
+          opacity: 0;
+        }
+      }
+
+      /* ─── Responsif tambahan (hanya untuk elemen pendukung) ─── */
+      @media (max-width: 480px) {
+        .heart-particle {
+          font-size: clamp(1rem, 4vw, 1.6rem);
+        }
+        .bubble {
+          border-width: 0.5px;
+        }
+        #big-heart {
+          font-size: clamp(15rem, 70vw, 30rem);
+        }
+      }
+
+      @media (max-width: 360px) {
+        #main-text {
+          /* sedikit lebih kecil di layar sangat sempit, tetap di 20px-an */
+          font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+        }
+        #big-heart {
+          font-size: clamp(12rem, 60vw, 25rem);
+        }
+      }
+
+      /* ─── Pesan interaksi ─── */
+      #hint {
+        position: fixed;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+        color: rgba(233, 30, 99, 0.5);
+        font-size: clamp(0.7rem, 1.8vw, 0.95rem);
         font-weight: 500;
-        margin-top: 16px;
-        letter-spacing: 0.03em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .sub-text span {
-        background: rgba(233, 30, 99, 0.08);
-        padding: 4px 14px;
-        border-radius: 30px;
-        border: 1px solid rgba(233, 30, 99, 0.1);
-        font-size: 0.85rem;
-      }
-
-      .click-hint {
-        margin-top: 28px;
-        font-size: clamp(0.8rem, 1.6vw, 1rem);
-        color: rgba(0, 0, 0, 0.3);
-        letter-spacing: 0.06em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        animation: hintPulse 2.8s ease-in-out infinite;
+        letter-spacing: 0.04em;
+        pointer-events: none;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(8px);
+        padding: 8px 20px;
+        border-radius: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        white-space: nowrap;
+        animation: hintPulse 3s ease-in-out infinite;
       }
 
       @keyframes hintPulse {
         0%,
         100% {
-          opacity: 0.4;
-          transform: scale(1);
+          opacity: 0.5;
+          transform: translateX(-50%) scale(1);
         }
         50% {
           opacity: 0.9;
-          transform: scale(1.04);
+          transform: translateX(-50%) scale(1.02);
         }
       }
 
-      .click-hint i {
-        font-style: normal;
-        font-size: 1.2rem;
-      }
-
-      /* ─── Hiasan garis ─── */
-      .divider {
-        width: 60px;
-        height: 2px;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(233, 30, 99, 0.2),
-          transparent
-        );
-        margin: 16px auto 12px;
-        border-radius: 4px;
-      }
-
-      /* ─── Responsif ─── */
       @media (max-width: 480px) {
-        .envelope {
-          padding: 30px 20px 40px;
-          border-radius: 28px;
-        }
-        .letter-icon {
-          font-size: 3.2rem;
-        }
-        .stamp {
-          font-size: 1.8rem;
-        }
-        .click-hint {
-          margin-top: 20px;
-          font-size: 0.75rem;
-        }
-      }
-
-      @media (max-width: 360px) {
-        .envelope {
-          padding: 24px 14px 32px;
-        }
-        .main-title {
-          font-size: clamp(1.6rem, 7vw, 2.2rem);
-        }
-        .letter-icon {
-          font-size: 2.6rem;
+        #hint {
+          bottom: 16px;
+          padding: 5px 14px;
+          font-size: 0.6rem;
+          white-space: nowrap;
         }
       }
     </style>
   </head>
   <body>
-    <!-- ─── Container untuk hati jatuh ─── -->
-    <div id="hearts-container"></div>
+    <div id="app">
+      <!-- Lapisan background -->
+      <div id="bg-layer"></div>
 
-    <!-- ─── Amplop / Surat ─── -->
-    <div
-      class="envelope"
-      id="surat"
-      role="button"
-      tabindex="0"
-      aria-label="Buka surat untuk Nisa">
-      <div class="stamp">💌</div>
-      <span class="letter-icon">✉️</span>
-      <h1 class="main-title">❤ Letter For Nisa!! ❤</h1>
-      <div class="divider"></div>
-      <div class="sub-text">
-        <span>✨ untukmu</span>
-        <span>💖 dari hati Kecil</span>
+      <!-- Wadah gelembung -->
+      <div id="bubble-container"></div>
+
+      <!-- HATI BESAR (muncul setelah 30 klik) -->
+      <div id="big-heart">❤️</div>
+
+      <!-- Teks utama dengan efek typing -->
+      <div id="text-container">
+        <h1 id="main-text">
+          Halo kak Nisa.. Kakak Setiap Hari Selalu <span class="typing"></span>
+        </h1>
       </div>
-      <div class="click-hint"><i>👆</i> klik untuk membuka <i>💫</i></div>
+
+      <!-- Hint kecil -->
+      <div id="hint">✨ sentuh gelembungnya ✨</div>
     </div>
 
     <script>
       (function () {
         "use strict";
 
-        // ─── DOM ───
-        const surat = document.getElementById("surat");
-        const heartsContainer = document.getElementById("hearts-container");
+        // ─── DOM refs ───
+        const container = document.getElementById("bubble-container");
+        const hint = document.getElementById("hint");
+        const mainText = document.getElementById("main-text");
+        const textContainer = document.getElementById("text-container");
+        const bigHeart = document.getElementById("big-heart");
 
-        // ─── Hati jatuh (Falling Hearts) ───
-        const HEART_EMOJIS = ["❤️", "💕", "💗", "💖", "♥️", "💘", "💝"];
-        const MAX_HEARTS = 35;
+        // ─── Konfigurasi ───
+        const CONFIG = {
+          maxBubbles: 28,
+          spawnInterval: 800,
+          minSize: 28,
+          maxSize: 90,
+          minDuration: 9,
+          maxDuration: 22,
+          heartCount: 10,
+          heartEmojis: ["❤️", "💕", "💗", "💖", "♥️"],
+          // Target klik untuk "kejutan"
+          targetClicks: 30,
+        };
 
-        function createFallingHeart() {
-          if (heartsContainer.children.length >= MAX_HEARTS) return;
+        // ─── State ───
+        let bubbles = [];
+        let spawnTimer = null;
+        let bubblePopCount = 0;
+        let hasCelebrated = false;
+        let typedInstance = null; // untuk menyimpan instance Typed
+
+        // ─── Utility ───
+        function random(min, max) {
+          return Math.random() * (max - min) + min;
+        }
+
+        function randomInt(min, max) {
+          return Math.floor(random(min, max + 1));
+        }
+
+        function pick(arr) {
+          return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // ─── Buat gelembung ───
+        function createBubble() {
+          if (bubbles.length >= CONFIG.maxBubbles) return null;
+
+          const size = random(CONFIG.minSize, CONFIG.maxSize);
+          const duration = random(CONFIG.minDuration, CONFIG.maxDuration);
+          const x = random(0, 100);
+          const yStart = random(100, 130);
+
+          const hue = random(320, 380) % 360;
+          const sat = random(30, 65);
+          const lig = random(70, 92);
+          const alpha = random(0.15, 0.35);
+          const color = `hsla(${hue}, ${sat}%, ${lig}%, ${alpha})`;
 
           const el = document.createElement("div");
-          el.className = "falling-heart";
-          el.textContent =
-            HEART_EMOJIS[Math.floor(Math.random() * HEART_EMOJIS.length)];
+          el.className = "bubble animating";
+          el.style.width = size + "px";
+          el.style.height = size + "px";
+          el.style.left = x + "%";
+          el.style.top = yStart + "%";
+          el.style.setProperty("--duration", duration + "s");
+          el.style.background = `radial-gradient(circle at 30% 25%, rgba(255,255,255,0.85) 0%, ${color} 70%, rgba(255,255,255,0.20) 100%)`;
+          el.style.boxShadow = `inset 0 -8px 20px rgba(255,255,255,0.5), 0 4px 20px rgba(0,0,0,0.05), inset 0 4px 12px rgba(255,255,255,0.7)`;
+          el.style.borderColor = `rgba(255,255,255,${random(0.2, 0.5)})`;
 
-          // Posisi horizontal acak (0% - 100%)
-          const left = Math.random() * 100;
-          el.style.left = left + "%";
+          const data = {
+            el: el,
+            size: size,
+            duration: duration,
+            x: x,
+            yStart: yStart,
+            alive: true,
+          };
 
-          // Ukuran acak (0.8rem - 2.8rem)
-          const size = 0.8 + Math.random() * 2.0;
-          el.style.fontSize = size + "rem";
+          const handler = function (e) {
+            e.stopPropagation();
+            if (!data.alive) return;
+            popBubble(data);
+          };
 
-          // Durasi jatuh acak (6s - 16s)
-          const duration = 6 + Math.random() * 10;
-          el.style.animationDuration = duration + "s";
+          el.addEventListener("click", handler);
+          el.addEventListener(
+            "touchstart",
+            function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (!data.alive) return;
+              popBubble(data);
+            },
+            { passive: false }
+          );
 
-          // Drift (goyangan horizontal) acak (-80px sampai 80px)
-          const drift = (Math.random() - 0.5) * 160;
-          el.style.setProperty("--drift", drift + "px");
+          container.appendChild(el);
+          bubbles.push(data);
 
-          // Opacity awal acak
-          el.style.opacity = 0.3 + Math.random() * 0.5;
-
-          // Delay acak (0 - 5s) agar tidak serempak
-          const delay = Math.random() * 5;
-          el.style.animationDelay = delay + "s";
-
-          heartsContainer.appendChild(el);
-
-          // Hapus setelah animasi selesai + sedikit buffer
-          const totalTime = (duration + delay) * 1000 + 500;
-          setTimeout(() => {
-            if (el.parentNode) {
-              el.remove();
+          el.addEventListener("animationend", function () {
+            if (data.alive) {
+              removeBubble(data);
             }
-          }, totalTime);
+          });
+
+          const timeoutId = setTimeout(() => {
+            if (data.alive) {
+              removeBubble(data);
+            }
+          }, duration * 1000 + 500);
+
+          data._timeoutId = timeoutId;
+          return data;
         }
 
-        // ─── Spawner hati jatuh ───
-        function startFallingHearts() {
-          // Buat beberapa langsung
-          for (let i = 0; i < 12; i++) {
-            setTimeout(() => createFallingHeart(), i * 300);
+        // ─── Hapus gelembung ───
+        function removeBubble(data) {
+          if (!data.alive) return;
+          data.alive = false;
+          if (data._timeoutId) {
+            clearTimeout(data._timeoutId);
+            data._timeoutId = null;
+          }
+          if (data.el && data.el.parentNode) {
+            data.el.remove();
+          }
+          const idx = bubbles.indexOf(data);
+          if (idx !== -1) {
+            bubbles.splice(idx, 1);
+          }
+        }
+
+        // ─── Fungsi untuk "kejutan" setelah 30 klik ───
+        function celebrate() {
+          if (hasCelebrated) return;
+          hasCelebrated = true;
+
+          // 1. Hentikan Typed.js
+          if (typedInstance) {
+            typedInstance.destroy();
+            typedInstance = null;
           }
 
-          // Spawn terus menerus
-          setInterval(() => {
-            if (heartsContainer.children.length < MAX_HEARTS) {
-              createFallingHeart();
+          // 2. Ubah teks
+          mainText.innerHTML = "Lope Youu manisss ❤️";
+          // Perbesar ukuran font agar lebih dramatis
+          mainText.style.fontSize = "clamp(2.8rem, 6vw, 4.8rem)";
+          // Gradasi tetap berjalan
+
+          // 3. Tampilkan hati besar
+          bigHeart.classList.add("show");
+
+          // 4. (Opsional) Sembunyikan hint jika belum hilang
+          if (hint) {
+            hint.style.transition = "opacity 0.8s ease";
+            hint.style.opacity = "0";
+            setTimeout(() => {
+              if (hint) hint.style.display = "none";
+            }, 900);
+          }
+        }
+
+        // ─── Pecahkan gelembung (ditambah counter) ───
+        function popBubble(data) {
+          if (!data.alive) return;
+          data.alive = false;
+
+          if (data._timeoutId) {
+            clearTimeout(data._timeoutId);
+            data._timeoutId = null;
+          }
+
+          const el = data.el;
+          const rect = el.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+
+          el.classList.remove("animating");
+          el.classList.add("burst");
+
+          const idx = bubbles.indexOf(data);
+          if (idx !== -1) {
+            bubbles.splice(idx, 1);
+          }
+
+          setTimeout(() => {
+            if (el.parentNode) el.remove();
+          }, 350);
+
+          spawnHearts(cx, cy, data.size);
+
+          // ─── COUNTER KLIK ───
+          if (!hasCelebrated) {
+            bubblePopCount++;
+            if (bubblePopCount >= CONFIG.targetClicks) {
+              celebrate();
             }
-            // Kadang spawn 2 sekaligus jika sepi
+          }
+
+          // Sembunyikan hint setelah interaksi pertama (hanya sekali)
+          if (hint && hint.style.display !== "none") {
+            hint.style.transition = "opacity 0.8s ease";
+            hint.style.opacity = "0";
+            setTimeout(() => {
+              if (hint) hint.style.display = "none";
+            }, 900);
+          }
+        }
+
+        // ─── Semprotkan hati ───
+        function spawnHearts(cx, cy, bubbleSize) {
+          const count = randomInt(8, CONFIG.heartCount + 4);
+          const emojis = CONFIG.heartEmojis;
+          const scaleBase = Math.min(1.6, bubbleSize / 40);
+
+          for (let i = 0; i < count; i++) {
+            const el = document.createElement("div");
+            el.className = "heart-particle";
+            el.textContent = pick(emojis);
+
+            const angle = random(0, Math.PI * 2);
+            const distance = random(60, 180) * scaleBase;
+            const tx = Math.cos(angle) * distance * random(0.6, 1.4);
+            const ty =
+              Math.sin(angle) * distance * random(0.6, 1.4) - random(20, 60);
+            const rot = random(-360, 360);
+            const dur = random(0.7, 1.6);
+
+            el.style.left = cx + "px";
+            el.style.top = cy + "px";
+            el.style.transform = "translate(-50%, -50%) scale(0.4)";
+            el.style.fontSize =
+              clamp(random(1.0, 2.6) * scaleBase, 0.8, 3.6) + "rem";
+
+            el.style.setProperty("--tx", tx + "px");
+            el.style.setProperty("--ty", ty + "px");
+            el.style.setProperty("--rot", rot + "deg");
+            el.style.setProperty("--fly-duration", dur + "s");
+
+            document.body.appendChild(el);
+
+            setTimeout(() => {
+              if (el.parentNode) el.remove();
+            }, dur * 1000 + 100);
+          }
+        }
+
+        function clamp(val, min, max) {
+          return Math.max(min, Math.min(max, val));
+        }
+
+        // ─── Spawner ───
+        function startSpawning() {
+          if (spawnTimer) return;
+          for (let i = 0; i < 6; i++) {
+            setTimeout(() => {
+              createBubble();
+            }, i * 200);
+          }
+          spawnTimer = setInterval(() => {
+            if (bubbles.length < CONFIG.maxBubbles) {
+              createBubble();
+            }
             if (
-              heartsContainer.children.length < MAX_HEARTS * 0.6 &&
-              Math.random() < 0.4
+              bubbles.length < CONFIG.maxBubbles * 0.5 &&
+              Math.random() < 0.3
             ) {
-              setTimeout(() => createFallingHeart(), 200);
+              setTimeout(() => createBubble(), 150);
             }
-          }, 900);
+          }, CONFIG.spawnInterval);
         }
 
-        // ─── Redirect ke index.html ───
-        function bukaSurat() {
-          surat.style.transition = "transform 0.15s ease, opacity 0.2s ease";
-          surat.style.transform = "scale(0.92)";
-          surat.style.opacity = "0.7";
-
-          setTimeout(() => {
-            window.location.href = "index.html";
-          }, 200);
-        }
-
-        // ─── Event ───
-        surat.addEventListener("click", bukaSurat);
-        surat.addEventListener(
-          "touchstart",
-          function (e) {
-            if (!this._clicked) {
-              this._clicked = true;
-              bukaSurat();
-              setTimeout(() => {
-                this._clicked = false;
-              }, 500);
-            }
-          },
-          { passive: true }
-        );
-
-        surat.addEventListener("keydown", function (e) {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            bukaSurat();
+        function stopSpawning() {
+          if (spawnTimer) {
+            clearInterval(spawnTimer);
+            spawnTimer = null;
           }
-        });
+        }
 
-        // ─── Start ───
-        startFallingHearts();
+        function clearAllBubbles() {
+          stopSpawning();
+          const list = [...bubbles];
+          for (const data of list) {
+            if (data.alive) {
+              removeBubble(data);
+            }
+          }
+          bubbles = [];
+          while (container.firstChild) {
+            container.removeChild(container.firstChild);
+          }
+        }
 
-        console.log("💌 Surat untuk Nisa siap dibuka! Hati berjatuhan 💕");
+        function handleVisibility() {
+          if (document.hidden) {
+            stopSpawning();
+          } else {
+            startSpawning();
+          }
+        }
+
+        // ─── Inisialisasi Typed.js ───
+        function initTyped() {
+          const options = {
+            strings: [
+              "cantik.. 😊",
+              "menawan.. ❤️",
+              "berkilau.. ✨",
+              "luar biasa.. 💖",
+              "istimewa.. 🌸",
+            ],
+            typeSpeed: 50,
+            backSpeed: 25,
+            backDelay: 1200,
+            startDelay: 300,
+            loop: true,
+            showCursor: true,
+            cursorChar: "|",
+            contentType: "html",
+          };
+
+          const typingElement = document.querySelector(".typing");
+          if (typingElement) {
+            typedInstance = new Typed(".typing", options);
+          }
+        }
+
+        // ─── Inisialisasi utama ───
+        function init() {
+          clearAllBubbles();
+          startSpawning();
+          document.addEventListener("visibilitychange", handleVisibility);
+
+          if (
+            document.readyState === "complete" ||
+            document.readyState === "interactive"
+          ) {
+            initTyped();
+          } else {
+            document.addEventListener("DOMContentLoaded", initTyped);
+          }
+        }
+
+        init();
+
+        window.__bubbleApp = {
+          createBubble,
+          popBubble,
+          clearAllBubbles,
+          bubbles: () => bubbles,
+          config: CONFIG,
+          celebrate: celebrate,
+        };
       })();
     </script>
   </body>
