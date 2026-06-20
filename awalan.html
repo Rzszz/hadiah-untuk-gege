@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>❤ Surat untuk Nisa</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Segoe UI", "Poppins", system-ui, -apple-system, sans-serif;
+        background: linear-gradient(
+          145deg,
+          #fce4ec 0%,
+          #f3e5f5 40%,
+          #e8eaf6 70%,
+          #e0f7fa 100%
+        );
+        padding: 20px;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* ─── Container untuk hati jatuh ─── */
+      #hearts-container {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      /* ─── Hati jatuh ─── */
+      .falling-heart {
+        position: absolute;
+        top: -10%;
+        font-size: 1.4rem;
+        opacity: 0.5;
+        animation: fall linear infinite;
+        pointer-events: none;
+        will-change: transform;
+        text-shadow: 0 0 20px rgba(233, 30, 99, 0.15);
+      }
+
+      @keyframes fall {
+        0% {
+          transform: translateY(0) translateX(0) rotate(0deg) scale(0.6);
+          opacity: 0.2;
+        }
+        10% {
+          opacity: 0.7;
+        }
+        90% {
+          opacity: 0.7;
+        }
+        100% {
+          transform: translateY(110vh) translateX(var(--drift, 40px))
+            rotate(720deg) scale(0.4);
+          opacity: 0.1;
+        }
+      }
+
+      /* ─── Amplop / Surat ─── */
+      .envelope {
+        position: relative;
+        z-index: 1;
+        max-width: 520px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(12px);
+        border-radius: 40px;
+        padding: 40px 30px 50px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1),
+          0 8px 24px rgba(233, 30, 99, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        text-align: center;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.3s ease;
+        overflow: hidden;
+      }
+
+      .envelope::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at 30% 20%,
+          rgba(255, 182, 193, 0.2) 0%,
+          transparent 60%
+        );
+        pointer-events: none;
+        border-radius: 40px;
+      }
+
+      .envelope:hover {
+        transform: scale(1.02) translateY(-6px);
+        box-shadow: 0 30px 80px rgba(233, 30, 99, 0.15);
+      }
+
+      .envelope:active {
+        transform: scale(0.96);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      }
+
+      /* ─── Dekorasi ─── */
+      .stamp {
+        font-size: 2.4rem;
+        margin-bottom: 8px;
+        display: inline-block;
+        animation: floatStamp 3s ease-in-out infinite;
+      }
+
+      @keyframes floatStamp {
+        0%,
+        100% {
+          transform: rotate(-4deg) translateY(0);
+        }
+        50% {
+          transform: rotate(4deg) translateY(-6px);
+        }
+      }
+
+      .letter-icon {
+        font-size: 4.5rem;
+        line-height: 1;
+        margin: 4px 0 12px;
+        display: block;
+        animation: letterPulse 2.5s ease-in-out infinite;
+      }
+
+      @keyframes letterPulse {
+        0%,
+        100% {
+          transform: scale(1) rotate(0deg);
+        }
+        50% {
+          transform: scale(1.08) rotate(-2deg);
+        }
+      }
+
+      .main-title {
+        font-size: clamp(2.2rem, 8vw, 3.8rem);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #e91e63, #9c27b0, #3f51b5);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradShift 6s ease-in-out infinite alternate;
+        margin: 8px 0 4px;
+        line-height: 1.2;
+      }
+
+      @keyframes gradShift {
+        0% {
+          background-position: 0% 0%;
+        }
+        100% {
+          background-position: 100% 100%;
+        }
+      }
+
+      .sub-text {
+        font-size: clamp(1rem, 2.5vw, 1.3rem);
+        color: rgba(233, 30, 99, 0.65);
+        font-weight: 500;
+        margin-top: 16px;
+        letter-spacing: 0.03em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .sub-text span {
+        background: rgba(233, 30, 99, 0.08);
+        padding: 4px 14px;
+        border-radius: 30px;
+        border: 1px solid rgba(233, 30, 99, 0.1);
+        font-size: 0.85rem;
+      }
+
+      .click-hint {
+        margin-top: 28px;
+        font-size: clamp(0.8rem, 1.6vw, 1rem);
+        color: rgba(0, 0, 0, 0.3);
+        letter-spacing: 0.06em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        animation: hintPulse 2.8s ease-in-out infinite;
+      }
+
+      @keyframes hintPulse {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.04);
+        }
+      }
+
+      .click-hint i {
+        font-style: normal;
+        font-size: 1.2rem;
+      }
+
+      /* ─── Hiasan garis ─── */
+      .divider {
+        width: 60px;
+        height: 2px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(233, 30, 99, 0.2),
+          transparent
+        );
+        margin: 16px auto 12px;
+        border-radius: 4px;
+      }
+
+      /* ─── Responsif ─── */
+      @media (max-width: 480px) {
+        .envelope {
+          padding: 30px 20px 40px;
+          border-radius: 28px;
+        }
+        .letter-icon {
+          font-size: 3.2rem;
+        }
+        .stamp {
+          font-size: 1.8rem;
+        }
+        .click-hint {
+          margin-top: 20px;
+          font-size: 0.75rem;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .envelope {
+          padding: 24px 14px 32px;
+        }
+        .main-title {
+          font-size: clamp(1.6rem, 7vw, 2.2rem);
+        }
+        .letter-icon {
+          font-size: 2.6rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ─── Container untuk hati jatuh ─── -->
+    <div id="hearts-container"></div>
+
+    <!-- ─── Amplop / Surat ─── -->
+    <div
+      class="envelope"
+      id="surat"
+      role="button"
+      tabindex="0"
+      aria-label="Buka surat untuk Nisa">
+      <div class="stamp">💌</div>
+      <span class="letter-icon">✉️</span>
+      <h1 class="main-title">❤ Letter For Nisa!! ❤</h1>
+      <div class="divider"></div>
+      <div class="sub-text">
+        <span>✨ untukmu</span>
+        <span>💖 dari hati Kecil</span>
+      </div>
+      <div class="click-hint"><i>👆</i> klik untuk membuka <i>💫</i></div>
+    </div>
+
+    <script>
+      (function () {
+        "use strict";
+
+        // ─── DOM ───
+        const surat = document.getElementById("surat");
+        const heartsContainer = document.getElementById("hearts-container");
+
+        // ─── Hati jatuh (Falling Hearts) ───
+        const HEART_EMOJIS = ["❤️", "💕", "💗", "💖", "♥️", "💘", "💝"];
+        const MAX_HEARTS = 35;
+
+        function createFallingHeart() {
+          if (heartsContainer.children.length >= MAX_HEARTS) return;
+
+          const el = document.createElement("div");
+          el.className = "falling-heart";
+          el.textContent =
+            HEART_EMOJIS[Math.floor(Math.random() * HEART_EMOJIS.length)];
+
+          // Posisi horizontal acak (0% - 100%)
+          const left = Math.random() * 100;
+          el.style.left = left + "%";
+
+          // Ukuran acak (0.8rem - 2.8rem)
+          const size = 0.8 + Math.random() * 2.0;
+          el.style.fontSize = size + "rem";
+
+          // Durasi jatuh acak (6s - 16s)
+          const duration = 6 + Math.random() * 10;
+          el.style.animationDuration = duration + "s";
+
+          // Drift (goyangan horizontal) acak (-80px sampai 80px)
+          const drift = (Math.random() - 0.5) * 160;
+          el.style.setProperty("--drift", drift + "px");
+
+          // Opacity awal acak
+          el.style.opacity = 0.3 + Math.random() * 0.5;
+
+          // Delay acak (0 - 5s) agar tidak serempak
+          const delay = Math.random() * 5;
+          el.style.animationDelay = delay + "s";
+
+          heartsContainer.appendChild(el);
+
+          // Hapus setelah animasi selesai + sedikit buffer
+          const totalTime = (duration + delay) * 1000 + 500;
+          setTimeout(() => {
+            if (el.parentNode) {
+              el.remove();
+            }
+          }, totalTime);
+        }
+
+        // ─── Spawner hati jatuh ───
+        function startFallingHearts() {
+          // Buat beberapa langsung
+          for (let i = 0; i < 12; i++) {
+            setTimeout(() => createFallingHeart(), i * 300);
+          }
+
+          // Spawn terus menerus
+          setInterval(() => {
+            if (heartsContainer.children.length < MAX_HEARTS) {
+              createFallingHeart();
+            }
+            // Kadang spawn 2 sekaligus jika sepi
+            if (
+              heartsContainer.children.length < MAX_HEARTS * 0.6 &&
+              Math.random() < 0.4
+            ) {
+              setTimeout(() => createFallingHeart(), 200);
+            }
+          }, 900);
+        }
+
+        // ─── Redirect ke index.html ───
+        function bukaSurat() {
+          surat.style.transition = "transform 0.15s ease, opacity 0.2s ease";
+          surat.style.transform = "scale(0.92)";
+          surat.style.opacity = "0.7";
+
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 200);
+        }
+
+        // ─── Event ───
+        surat.addEventListener("click", bukaSurat);
+        surat.addEventListener(
+          "touchstart",
+          function (e) {
+            if (!this._clicked) {
+              this._clicked = true;
+              bukaSurat();
+              setTimeout(() => {
+                this._clicked = false;
+              }, 500);
+            }
+          },
+          { passive: true }
+        );
+
+        surat.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            bukaSurat();
+          }
+        });
+
+        // ─── Start ───
+        startFallingHearts();
+
+        console.log("💌 Surat untuk Nisa siap dibuka! Hati berjatuhan 💕");
+      })();
+    </script>
+  </body>
+</html>
