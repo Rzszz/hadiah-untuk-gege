@@ -161,7 +161,6 @@
       }
 
       #main-text {
-        /* UKURAN FONT DIKECILKAN: 20px ~ 30px (desktop 25-30, HP 20-25) */
         font-size: clamp(1.25rem, 2.5vw, 1.9rem);
         font-weight: 700;
         line-height: 1.3;
@@ -180,7 +179,6 @@
         transition: font-size 0.6s ease, background 0.6s ease;
       }
 
-      /* Span yang diketik oleh Typed.js – warnanya ikut gradien */
       #main-text .typing {
         -webkit-text-fill-color: initial;
         background: none;
@@ -196,7 +194,7 @@
         }
       }
 
-      /* ─── Hati Besar di Tengah (muncul setelah 5 klik) ─── */
+      /* ─── Hati Besar di Tengah ─── */
       #big-heart {
         position: fixed;
         top: 50%;
@@ -262,7 +260,7 @@
         }
       }
 
-      /* ─── Responsif tambahan (hanya untuk elemen pendukung) ─── */
+      /* ─── Responsif ─── */
       @media (max-width: 480px) {
         .heart-particle {
           font-size: clamp(1rem, 4vw, 1.6rem);
@@ -277,7 +275,6 @@
 
       @media (max-width: 360px) {
         #main-text {
-          /* sedikit lebih kecil di layar sangat sempit, tetap di 20px-an */
           font-size: clamp(1.15rem, 2.5vw, 1.4rem);
         }
         #big-heart {
@@ -331,23 +328,14 @@
   </head>
   <body>
     <div id="app">
-      <!-- Lapisan background -->
       <div id="bg-layer"></div>
-
-      <!-- Wadah gelembung -->
       <div id="bubble-container"></div>
-
-      <!-- HATI BESAR (muncul setelah 5 klik) -->
       <div id="big-heart">❤️</div>
-
-      <!-- Teks utama dengan efek typing -->
       <div id="text-container">
         <h1 id="main-text">
           Halo kak Nisa.. Kakak Setiap Hari Selalu <span class="typing"></span>
         </h1>
       </div>
-
-      <!-- Hint kecil -->
       <div id="hint">✨ sentuh gelembungnya ✨</div>
     </div>
 
@@ -355,48 +343,40 @@
       (function () {
         "use strict";
 
-        // ─── DOM refs ───
         const container = document.getElementById("bubble-container");
         const hint = document.getElementById("hint");
         const mainText = document.getElementById("main-text");
-        const textContainer = document.getElementById("text-container");
         const bigHeart = document.getElementById("big-heart");
 
         // ─── Konfigurasi ───
         const CONFIG = {
-          maxBubbles: 28,
-          spawnInterval: 800,
+          maxBubbles: 15,
+          spawnInterval: 333, // ~3 per detik
           minSize: 28,
-          maxSize: 90,
+          maxSize: 80,
           minDuration: 9,
-          maxDuration: 22,
-          heartCount: 10,
+          maxDuration: 18,
+          heartCount: 8,
           heartEmojis: ["❤️", "💕", "💗", "💖", "♥️"],
-          // Target klik untuk "kejutan" – SEKARANG 5
           targetClicks: 5,
         };
 
-        // ─── State ───
         let bubbles = [];
         let spawnTimer = null;
         let bubblePopCount = 0;
         let hasCelebrated = false;
-        let typedInstance = null; // untuk menyimpan instance Typed
+        let typedInstance = null;
 
-        // ─── Utility ───
         function random(min, max) {
           return Math.random() * (max - min) + min;
         }
-
         function randomInt(min, max) {
           return Math.floor(random(min, max + 1));
         }
-
         function pick(arr) {
           return arr[Math.floor(Math.random() * arr.length)];
         }
 
-        // ─── Buat gelembung ───
         function createBubble() {
           if (bubbles.length >= CONFIG.maxBubbles) return null;
 
@@ -422,14 +402,7 @@
           el.style.boxShadow = `inset 0 -8px 20px rgba(255,255,255,0.5), 0 4px 20px rgba(0,0,0,0.05), inset 0 4px 12px rgba(255,255,255,0.7)`;
           el.style.borderColor = `rgba(255,255,255,${random(0.2, 0.5)})`;
 
-          const data = {
-            el: el,
-            size: size,
-            duration: duration,
-            x: x,
-            yStart: yStart,
-            alive: true,
-          };
+          const data = { el, size, duration, x, yStart, alive: true };
 
           const handler = function (e) {
             e.stopPropagation();
@@ -453,22 +426,17 @@
           bubbles.push(data);
 
           el.addEventListener("animationend", function () {
-            if (data.alive) {
-              removeBubble(data);
-            }
+            if (data.alive) removeBubble(data);
           });
 
           const timeoutId = setTimeout(() => {
-            if (data.alive) {
-              removeBubble(data);
-            }
+            if (data.alive) removeBubble(data);
           }, duration * 1000 + 500);
 
           data._timeoutId = timeoutId;
           return data;
         }
 
-        // ─── Hapus gelembung ───
         function removeBubble(data) {
           if (!data.alive) return;
           data.alive = false;
@@ -476,36 +444,30 @@
             clearTimeout(data._timeoutId);
             data._timeoutId = null;
           }
-          if (data.el && data.el.parentNode) {
-            data.el.remove();
-          }
+          if (data.el && data.el.parentNode) data.el.remove();
           const idx = bubbles.indexOf(data);
-          if (idx !== -1) {
-            bubbles.splice(idx, 1);
-          }
+          if (idx !== -1) bubbles.splice(idx, 1);
         }
 
-        // ─── Fungsi untuk "kejutan" setelah 5 klik ───
         function celebrate() {
           if (hasCelebrated) return;
           hasCelebrated = true;
 
-          // 1. Hentikan Typed.js
+          // ─── HENTIKAN SPAWNING GELEMBUNG ───
+          stopSpawning();
+
+          // Hentikan Typed
           if (typedInstance) {
             typedInstance.destroy();
             typedInstance = null;
           }
 
-          // 2. Ubah teks
+          // Ubah teks
           mainText.innerHTML = "Lope Youu manisss ❤️";
-          // Perbesar ukuran font agar lebih dramatis
           mainText.style.fontSize = "clamp(2.8rem, 6vw, 4.8rem)";
-          // Gradasi tetap berjalan
-
-          // 3. Tampilkan hati besar
           bigHeart.classList.add("show");
 
-          // 4. (Opsional) Sembunyikan hint jika belum hilang
+          // Sembunyikan hint
           if (hint) {
             hint.style.transition = "opacity 0.8s ease";
             hint.style.opacity = "0";
@@ -515,7 +477,6 @@
           }
         }
 
-        // ─── Pecahkan gelembung (ditambah counter) ───
         function popBubble(data) {
           if (!data.alive) return;
           data.alive = false;
@@ -534,9 +495,7 @@
           el.classList.add("burst");
 
           const idx = bubbles.indexOf(data);
-          if (idx !== -1) {
-            bubbles.splice(idx, 1);
-          }
+          if (idx !== -1) bubbles.splice(idx, 1);
 
           setTimeout(() => {
             if (el.parentNode) el.remove();
@@ -544,7 +503,6 @@
 
           spawnHearts(cx, cy, data.size);
 
-          // ─── COUNTER KLIK ───
           if (!hasCelebrated) {
             bubblePopCount++;
             if (bubblePopCount >= CONFIG.targetClicks) {
@@ -552,7 +510,6 @@
             }
           }
 
-          // Sembunyikan hint setelah interaksi pertama (hanya sekali)
           if (hint && hint.style.display !== "none") {
             hint.style.transition = "opacity 0.8s ease";
             hint.style.opacity = "0";
@@ -562,11 +519,10 @@
           }
         }
 
-        // ─── Semprotkan hati ───
         function spawnHearts(cx, cy, bubbleSize) {
-          const count = randomInt(8, CONFIG.heartCount + 4);
+          const count = randomInt(6, CONFIG.heartCount + 2);
           const emojis = CONFIG.heartEmojis;
-          const scaleBase = Math.min(1.6, bubbleSize / 40);
+          const scaleBase = Math.min(1.4, bubbleSize / 40);
 
           for (let i = 0; i < count; i++) {
             const el = document.createElement("div");
@@ -574,18 +530,18 @@
             el.textContent = pick(emojis);
 
             const angle = random(0, Math.PI * 2);
-            const distance = random(60, 180) * scaleBase;
-            const tx = Math.cos(angle) * distance * random(0.6, 1.4);
+            const distance = random(50, 140) * scaleBase;
+            const tx = Math.cos(angle) * distance * random(0.6, 1.3);
             const ty =
-              Math.sin(angle) * distance * random(0.6, 1.4) - random(20, 60);
+              Math.sin(angle) * distance * random(0.6, 1.3) - random(20, 50);
             const rot = random(-360, 360);
-            const dur = random(0.7, 1.6);
+            const dur = random(0.6, 1.4);
 
             el.style.left = cx + "px";
             el.style.top = cy + "px";
             el.style.transform = "translate(-50%, -50%) scale(0.4)";
             el.style.fontSize =
-              clamp(random(1.0, 2.6) * scaleBase, 0.8, 3.6) + "rem";
+              clamp(random(0.8, 2.0) * scaleBase, 0.7, 2.8) + "rem";
 
             el.style.setProperty("--tx", tx + "px");
             el.style.setProperty("--ty", ty + "px");
@@ -604,23 +560,14 @@
           return Math.max(min, Math.min(max, val));
         }
 
-        // ─── Spawner ───
         function startSpawning() {
           if (spawnTimer) return;
-          for (let i = 0; i < 6; i++) {
-            setTimeout(() => {
-              createBubble();
-            }, i * 200);
+          for (let i = 0; i < 3; i++) {
+            setTimeout(() => createBubble(), i * 400);
           }
           spawnTimer = setInterval(() => {
             if (bubbles.length < CONFIG.maxBubbles) {
               createBubble();
-            }
-            if (
-              bubbles.length < CONFIG.maxBubbles * 0.5 &&
-              Math.random() < 0.3
-            ) {
-              setTimeout(() => createBubble(), 150);
             }
           }, CONFIG.spawnInterval);
         }
@@ -634,27 +581,19 @@
 
         function clearAllBubbles() {
           stopSpawning();
-          const list = [...bubbles];
-          for (const data of list) {
-            if (data.alive) {
-              removeBubble(data);
-            }
+          for (const data of [...bubbles]) {
+            if (data.alive) removeBubble(data);
           }
           bubbles = [];
-          while (container.firstChild) {
+          while (container.firstChild)
             container.removeChild(container.firstChild);
-          }
         }
 
         function handleVisibility() {
-          if (document.hidden) {
-            stopSpawning();
-          } else {
-            startSpawning();
-          }
+          if (document.hidden) stopSpawning();
+          else startSpawning();
         }
 
-        // ─── Inisialisasi Typed.js ───
         function initTyped() {
           const options = {
             strings: [
@@ -680,7 +619,6 @@
           }
         }
 
-        // ─── Inisialisasi utama ───
         function init() {
           clearAllBubbles();
           startSpawning();
@@ -704,7 +642,7 @@
           clearAllBubbles,
           bubbles: () => bubbles,
           config: CONFIG,
-          celebrate: celebrate,
+          celebrate,
         };
       })();
     </script>
